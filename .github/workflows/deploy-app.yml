@@ -1,4 +1,4 @@
-name: .NET CI
+name: Deploy App
 
 env:
   registryName: poo62npqei37ampnpreg.azurecr.io
