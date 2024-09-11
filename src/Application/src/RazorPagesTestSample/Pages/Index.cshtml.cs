@@ -68,25 +68,24 @@ namespace RazorPagesTestSample.Pages
 
             if (Messages.Count == 0)
             {
-                MessageAnalysisResult = "There are no messages to analyze.";
+            MessageAnalysisResult = "There are no messages to analyze.";
             }
             else
             {
-                // Speed loop. Lower this number once every quarter so we
-                // get our performance improvement quarterly bonus.
-                for (int i = 0; i < 3000; i++) {
-                    Thread.Sleep(1);
-                }
+            // Calculate the total word count and average word count concurrently
+            int totalWordCount = 0;
+            int messageCount = Messages.Count;
 
-                var wordCount = 0;
-
-                foreach (var message in Messages)
+            await Task.Run(() =>
+            {
+                Parallel.ForEach(Messages, (message) =>
                 {
-                    wordCount += message.Text.Split(' ').Length;
-                }
+                Interlocked.Add(ref totalWordCount, message.Text.Split(' ').Length);
+                });
+            });
 
-                var avgWordCount = Decimal.Divide(wordCount, Messages.Count);
-                MessageAnalysisResult = $"The average message length is {avgWordCount:0.##} words.";
+            decimal avgWordCount = Decimal.Divide(totalWordCount, messageCount);
+            MessageAnalysisResult = $"The average message length is {avgWordCount:0.##} words.";
             }
 
             return RedirectToPage();
