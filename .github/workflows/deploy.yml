@@ -9,7 +9,7 @@ on:
         - test
         - prod
 
-name: Azure Bicep-Advanced
+name: Deploy Azure Infrastructure
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
